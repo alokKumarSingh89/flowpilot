@@ -10,7 +10,7 @@ FlowPilot needs multiple business domains, asynchronous ingestion, realtime conv
 
 ## Decision
 
-Use a pnpm TypeScript monorepo on Node.js 24 LTS. Organize deployable applications as `apps/api` (NestJS REST/OpenAPI API), `apps/web` (Next.js/React), and `apps/worker` (background-worker process), with shared packages under `packages/`. Deploy the stateless API/BFF and background-worker processes independently so their scaling and failure behavior are isolated.
+Use a pnpm TypeScript monorepo on Node.js 26. Organize deployable applications as `apps/api` (NestJS REST/OpenAPI API), `apps/web` (Next.js/React), and `apps/worker` (background-worker process), with shared packages under `packages/`. Deploy the stateless API/BFF and background-worker processes independently so their scaling and failure behavior are isolated.
 
 ## Alternatives Considered
 

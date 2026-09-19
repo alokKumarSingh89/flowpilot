@@ -24,8 +24,8 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 
 # Scope
 
-- Create only the approved pnpm TypeScript monorepo bootstrap on Node.js 24 LTS: root workspace configuration; `apps/api` NestJS REST/OpenAPI bootstrap; `apps/web` and `apps/worker` reserved entry-point boundaries; and reserved `packages/config`, `packages/database`, `packages/contracts`, `packages/observability`, `packages/auth`, and `packages/ai` boundaries. Only configuration, contracts, and observability receive the platform behavior specified by this task. Do not implement web UI, worker behavior, database access, authentication, AI, or business modules.
-- Add pnpm commands for TypeScript build/type check, ESLint, Prettier, Vitest, and the future Supertest/Playwright boundaries. The bootstrap must be reproducible from a clean checkout with pnpm and Node.js 24 LTS.
+- Create only the approved pnpm TypeScript monorepo bootstrap on Node.js 26: root workspace configuration; `apps/api` NestJS REST/OpenAPI bootstrap; `apps/web` and `apps/worker` reserved entry-point boundaries; and reserved `packages/config`, `packages/database`, `packages/contracts`, `packages/observability`, `packages/auth`, and `packages/ai` boundaries. Only configuration, contracts, and observability receive the platform behavior specified by this task. Do not implement web UI, worker behavior, database access, authentication, AI, or business modules.
+- Add pnpm commands for TypeScript build/type check, ESLint, Prettier, Vitest, and the future Supertest/Playwright boundaries. The bootstrap must be reproducible from a clean checkout with pnpm and Node.js 26.
 - Define an explicit, allow-listed runtime-configuration schema. Validate required values and value formats before the API accepts traffic; expose only a sanitized configuration summary suitable for diagnostics.
 - Define a versioned internal API error contract with a stable error code, safe message, request/correlation ID, and no stack trace, token, credential, secret, or customer content in responses.
 - Define ingress correlation behavior: accept a syntactically valid correlation/request ID when supplied, otherwise generate one; attach it to request context and response headers; make it available to downstream platform code without global mutable state.
@@ -46,7 +46,7 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 # Required Architecture Inputs
 
 - ADR-0001 and ADR-0008 are accepted and provide the modular-monolith and OpenTelemetry-compatible direction.
-- The approved baseline is TypeScript on Node.js 24 LTS; pnpm monorepo; NestJS REST/OpenAPI API; Next.js/React frontend boundary; Prisma 7/PostgreSQL; Redis/BullMQ; Vitest, Supertest, Playwright; ESLint, Prettier, Husky, lint-staged; Docker Compose; and GitHub Actions. This task implements only the subset explicitly in scope.
+- The approved baseline is TypeScript on Node.js 26; pnpm monorepo; NestJS REST/OpenAPI API; Next.js/React frontend boundary; Prisma 7/PostgreSQL; Redis/BullMQ; Vitest, Supertest, Playwright; ESLint, Prettier, Husky, lint-staged; Docker Compose; and GitHub Actions. This task implements only the subset explicitly in scope.
 - ADR-0007 does not require provider configuration in this task. Provider-specific configuration starts only in `TASK-AUTH-001` after a provider-selection record is approved.
 
 # Parallelization
@@ -55,7 +55,7 @@ Yes. After its dependencies are complete, it can run in parallel with: other non
 
 # Expected Changes
 
-- Create `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, Node.js 24 LTS version metadata, TypeScript project configuration, ESLint, Prettier, Husky, lint-staged, Vitest, and Docker Compose configuration only to the extent needed for the empty foundation.
+- Create `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, Node.js 26 version metadata, TypeScript project configuration, ESLint, Prettier, Husky, lint-staged, Vitest, and Docker Compose configuration only to the extent needed for the empty foundation.
 - Create `apps/api`, `apps/web`, and `apps/worker` boundaries; only `apps/api` receives the minimal NestJS REST/OpenAPI bootstrap required to exercise configuration, correlation, and safe errors. `apps/web` and `apps/worker` contain no product, queue, or UI behavior.
 - Create `packages/config`, `packages/contracts`, and `packages/observability` modules for configuration, request context/correlation IDs, and safe error serialization. Create reserved `packages/database`, `packages/auth`, and `packages/ai` package boundaries only; they contain no implementation code in this task.
 - Add `.env.example` or equivalent non-secret configuration documentation containing variable names, formats, required/optional status, and safe development defaults only. Never add real credentials or tokens.
