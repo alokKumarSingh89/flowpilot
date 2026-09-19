@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Context
 
@@ -10,7 +10,7 @@ The PRD requires structured logs, metrics, distributed traces, AI/tool/job visib
 
 ## Decision
 
-Adopt OpenTelemetry-compatible logs, metrics, and traces. Assign request correlation IDs and AI trace IDs. Maintain a separate durable, append-only audit-event model for business/security actions; application mutation paths cannot update or delete audit records. Record sanitized AI metadata and token/cost usage by execution.
+Adopt an OpenTelemetry-compatible architecture for structured logs, metrics, and traces. Assign request correlation IDs at ingress and AI trace IDs at runtime. Maintain a separate durable, append-only audit-event model for business/security actions; application mutation paths cannot update or delete audit records. Record sanitized AI metadata and token/cost usage by execution. The `packages/observability` boundary owns shared correlation and telemetry contracts; exporter/vendor selection remains deployment configuration and must not leak into domain modules.
 
 ## Alternatives Considered
 

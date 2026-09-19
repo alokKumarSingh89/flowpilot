@@ -15,7 +15,7 @@ FlowPilot must enforce server-side authorization and tenant isolation, protect c
 ## Data, secrets, and APIs
 
 - Store provider/integration credentials in a managed secret manager; encrypt in transit and at rest; rotate them; never commit or log them. [SEC-003–004]
-- Validate request and tool schemas, enforce payload/size limits, idempotency where needed, CORS policy, rate limits, WAF/bot controls, and secure cookie/CSRF controls where applicable. [SEC-006, SEC-010]
+- Validate configuration, request, and tool schemas at external boundaries before domain handling; enforce payload/size limits, idempotency where needed, CORS policy, rate limits, WAF/bot controls, and secure cookie/CSRF controls where applicable. Validation failures use safe typed errors and must not echo sensitive input. [SEC-006, SEC-010; OBS-006]
 - Uploads are private, type/size/signature validated and scanned before parsing. Object keys are server-generated; signed URLs are short-lived and authorized against the exact asset and operation. URL ingestion blocks SSRF via network, redirect, content, and timeout restrictions. [KB-002; SEC-008]
 
 ## AI and tool safety

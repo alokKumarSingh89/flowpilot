@@ -15,6 +15,8 @@ FlowPilot requires structured logs, metrics, distributed tracing, AI traces, err
 | Audit | append-only durable actor/action/target/outcome records for important changes; separate write permissions from application mutation paths | AGENT-009, HANDOFF-007, SEC-009 |
 | Error tracking | sanitized exception grouping by release/environment | OBS-005–006 |
 
+Shared observability contracts, correlation context, and sanitization helpers live in `packages/observability`. They must remain OpenTelemetry-compatible and independent of exporter/vendor SDKs. Full structured logging, metrics, traces, and exporter configuration are introduced incrementally by the relevant platform and feature tasks.
+
 ## Correlation
 
 Assign a correlation/request ID at ingress and propagate it through conversation messages, jobs, agent executions, tool calls, provider calls, and response headers. Each AI execution has an independent trace identifier. [OBS-001–004; RUNTIME-007]

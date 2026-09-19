@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Context
 
@@ -10,7 +10,7 @@ The PRD requires context, retrieval, authorized tools, observability, execution 
 
 ## Decision
 
-Use an in-house bounded runtime state machine and a provider-neutral AI gateway. A simple MVP selector resolves at most one active support agent per workspace while preserving agent and immutable configuration-version identity on executions. The model may propose typed calls only for tools in the configured registry; the runtime independently authorizes and validates them. Enforce turn, tool, time, token, and output limits; record AI traces and usage.
+Use an in-house bounded runtime state machine and a provider-neutral AI gateway in the `packages/ai` boundary. A simple MVP selector resolves at most one active support agent per workspace while preserving agent and immutable configuration-version identity on executions. The model may propose typed calls only for tools in the configured registry; the runtime independently authorizes and validates them. Enforce turn, tool, time, token, and output limits; record AI traces and usage.
 
 ## Alternatives Considered
 

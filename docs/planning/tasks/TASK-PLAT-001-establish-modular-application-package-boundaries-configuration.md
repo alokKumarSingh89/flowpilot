@@ -24,8 +24,8 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 
 # Scope
 
-- Create only the approved modular-monolith bootstrap: root workspace configuration; API bootstrap; shared platform/configuration package or module; and a reserved worker entry-point/package boundary without queue behavior.
-- Add the approved TypeScript build, type-check, lint, formatting, and test commands. The bootstrap must be reproducible from a clean checkout with the repository-approved package manager and supported runtime version.
+- Create only the approved pnpm TypeScript monorepo bootstrap on Node.js 24 LTS: root workspace configuration; `apps/api` NestJS REST/OpenAPI bootstrap; `apps/web` and `apps/worker` reserved entry-point boundaries; and reserved `packages/config`, `packages/database`, `packages/contracts`, `packages/observability`, `packages/auth`, and `packages/ai` boundaries. Only configuration, contracts, and observability receive the platform behavior specified by this task. Do not implement web UI, worker behavior, database access, authentication, AI, or business modules.
+- Add pnpm commands for TypeScript build/type check, ESLint, Prettier, Vitest, and the future Supertest/Playwright boundaries. The bootstrap must be reproducible from a clean checkout with pnpm and Node.js 24 LTS.
 - Define an explicit, allow-listed runtime-configuration schema. Validate required values and value formats before the API accepts traffic; expose only a sanitized configuration summary suitable for diagnostics.
 - Define a versioned internal API error contract with a stable error code, safe message, request/correlation ID, and no stack trace, token, credential, secret, or customer content in responses.
 - Define ingress correlation behavior: accept a syntactically valid correlation/request ID when supplied, otherwise generate one; attach it to request context and response headers; make it available to downstream platform code without global mutable state.
@@ -35,7 +35,7 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 # Out of Scope
 
 - End-user product features, business schemas, tenant persistence/RLS, authentication or identity-provider configuration, queues/workers, secret-manager integration, structured logging/tracing exporters, and deployment infrastructure.
-- Selecting an API framework, package manager, runtime version, or repository topology not already approved by the platform baseline. If the approved baseline is absent or conflicts with this task, stop and request architecture approval rather than choosing one.
+- Selecting an API framework, package manager, runtime version, repository topology, database, job queue, model provider, or other technology outside the approved baseline.
 - Changes to the PRD, approved architecture, ADRs, or this task's requirement mapping without approval.
 - Unrelated refactoring or dependencies not required for this focused task.
 
@@ -45,8 +45,8 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 
 # Required Architecture Inputs
 
-- ADR-0001 and ADR-0008 provide the modular-monolith and OpenTelemetry-compatible direction.
-- The implementation baseline must identify the repository-approved TypeScript runtime, package manager, API bootstrap framework, directory/package layout, and test/lint/format tools. This task does not authorize selecting them.
+- ADR-0001 and ADR-0008 are accepted and provide the modular-monolith and OpenTelemetry-compatible direction.
+- The approved baseline is TypeScript on Node.js 24 LTS; pnpm monorepo; NestJS REST/OpenAPI API; Next.js/React frontend boundary; Prisma 7/PostgreSQL; Redis/BullMQ; Vitest, Supertest, Playwright; ESLint, Prettier, Husky, lint-staged; Docker Compose; and GitHub Actions. This task implements only the subset explicitly in scope.
 - ADR-0007 does not require provider configuration in this task. Provider-specific configuration starts only in `TASK-AUTH-001` after a provider-selection record is approved.
 
 # Parallelization
@@ -55,9 +55,9 @@ Yes. After its dependencies are complete, it can run in parallel with: other non
 
 # Expected Changes
 
-- Create the approved root workspace manifest/lockfile and tool configuration.
-- Create the approved API bootstrap and platform modules for configuration, request context, correlation IDs, and safe error serialization.
-- Create a reserved worker package/entry-point boundary only if the approved repository layout requires it; it must not implement queue processing.
+- Create `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`, Node.js 24 LTS version metadata, TypeScript project configuration, ESLint, Prettier, Husky, lint-staged, Vitest, and Docker Compose configuration only to the extent needed for the empty foundation.
+- Create `apps/api`, `apps/web`, and `apps/worker` boundaries; only `apps/api` receives the minimal NestJS REST/OpenAPI bootstrap required to exercise configuration, correlation, and safe errors. `apps/web` and `apps/worker` contain no product, queue, or UI behavior.
+- Create `packages/config`, `packages/contracts`, and `packages/observability` modules for configuration, request context/correlation IDs, and safe error serialization. Create reserved `packages/database`, `packages/auth`, and `packages/ai` package boundaries only; they contain no implementation code in this task.
 - Add `.env.example` or equivalent non-secret configuration documentation containing variable names, formats, required/optional status, and safe development defaults only. Never add real credentials or tokens.
 - Add focused unit/API-contract tests and minimal developer documentation describing local validation and the standard commands.
 
@@ -67,20 +67,20 @@ Internal configuration, request context, correlation-header, and error-response 
 
 # Tooling Requirements
 
-- Provide deterministic commands for install, format check, lint, type check, unit test, and build.
-- Pin tool versions through the repository-approved manifest and lockfile.
+- Provide deterministic pnpm commands for install, format check, lint, type check, Vitest unit/API-contract tests, and build.
+- Pin Node/package/tool versions through the approved workspace metadata and pnpm lockfile.
 - Configure tooling to fail on type, lint, formatting, or test failures; CI enforcement itself remains `TASK-PLAT-006`.
 
 # Configuration Requirements
 
-- Separate public/non-secret runtime configuration from secret values.
+- Separate public/non-secret runtime configuration from secret values. Configuration validation for this task is implemented within `packages/config` using explicit runtime checks; do not add a separate validation library without approval.
 - Validate configuration at process startup; fail closed with a safe error code when required configuration is absent or malformed.
 - Do not read, log, serialize, or expose provider credentials, database URLs, queue credentials, or raw environment values.
 - Define the request/correlation header name, validation limits, response behavior, and generated-ID format in the internal contract.
 
 # Environment Requirements
 
-- Support local development, test, and production configuration modes without environment-specific application branching outside the configuration boundary.
+- Support local development, test, and production configuration modes without environment-specific application branching outside the configuration boundary. Docker Compose is reserved for the approved local infrastructure introduced by later tasks; this task must not start PostgreSQL, Redis, BullMQ, or other services.
 - Test configuration must use non-secret deterministic values and must not require live cloud services.
 - Provider-specific identity values are intentionally excluded; they are introduced by `TASK-AUTH-001` only after ADR-0007 provider selection.
 

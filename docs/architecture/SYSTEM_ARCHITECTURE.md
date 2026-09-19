@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-This document records the approved target architecture for FlowPilot. Confirmed scope comes from the PRD; implementation choices and deployment details are engineering recommendations, not new product requirements.
+This document records the approved target architecture and technical baseline for FlowPilot. Confirmed product scope comes from the PRD; the baseline constrains implementation technology but does not add product features.
 
 ### MVP
 
@@ -27,13 +27,13 @@ Admin console / customer chat widget
               | \--- AI provider gateway
               |
               +--- PostgreSQL + pgvector (system of record)
-              +--- Redis (ephemeral cache, rate limits, fan-out)
+              +--- Redis (cache, rate limits, fan-out, BullMQ backing store)
               +--- Private object storage (documents)
               +--- Durable queue and worker deployments
               +--- Telemetry, audit, and error-tracking services
 ```
 
-The MVP is a modular monolith: one backend codebase organized by domains, deployed as independently scalable API and worker processes. It avoids early distributed-service complexity while retaining clear domain interfaces.
+The MVP is a pnpm TypeScript modular monolith on Node.js 24 LTS: one backend codebase organized by domains, deployed as independently scalable API and worker processes. It avoids early distributed-service complexity while retaining clear domain interfaces.
 
 ## Component responsibilities
 
@@ -41,9 +41,9 @@ The MVP is a modular monolith: one backend codebase organized by domains, deploy
 |---|---|---|
 | Admin console | Workspace administration, knowledge, agent settings, support inbox, analytics, audit access | WS-004–007, KB-001–010, AGENT-001–009, HANDOFF-004–006, ANALYTICS-001–005 |
 | Customer chat | Starts/resumes chats, receives streamed AI or human messages, displays citations and handoff state | CHAT-001–006, KB-011, HANDOFF-001 |
-| API | Auth verification, tenant resolution, RBAC, resource APIs, conversation orchestration, streaming | AUTH-001–008, RBAC-002–003, CHAT-005, SEC-001–002 |
-| Workers | Ingestion, embedding, index lifecycle, analytics aggregation, notifications, cleanup | KB-006, JOB-001–004 |
-| PostgreSQL | Transactional data, RLS defense-in-depth, full-text and vector indexes | WS-008, SEC-001, KB-007–008 |
+| API | NestJS REST/OpenAPI API; auth verification, tenant resolution, RBAC, resource APIs, conversation orchestration, streaming | AUTH-001–008, RBAC-002–003, CHAT-005, SEC-001–002 |
+| Workers | BullMQ worker process for ingestion, embedding, index lifecycle, analytics aggregation, notifications, cleanup | KB-006, JOB-001–004 |
+| PostgreSQL | Prisma 7 transactional data access/migrations, RLS defense-in-depth, full-text and vector indexes | WS-008, SEC-001, KB-007–008 |
 | Object storage | Private originals and processed file assets | KB-002, SEC-008 |
 | AI gateway/runtime | Context, retrieval, provider access, tools, limits, traces, controlled failures | RUNTIME-001–010 |
 
@@ -61,9 +61,17 @@ Parsing, URL retrieval, scanning, chunking, embedding, re-indexing, deletion cle
 
 The API remains stateless and scales horizontally. Durable persistence precedes realtime fan-out. For AI/provider failure, respond safely and offer escalation rather than retrying uncertain work. Retain the last known-good knowledge version while a replacement source is processing. [RUNTIME-010; HANDOFF-002]
 
-## Technology direction
+## Approved technical baseline
 
-Recommended MVP stack: TypeScript monorepo; React/Next.js UI; NestJS with Fastify API; managed PostgreSQL with pgvector; Redis; private S3-compatible storage; managed durable queue/DLQ; managed identity provider; OpenTelemetry, error tracking, and managed container deployment. These are recommendations subject to ADR approval, not PRD requirements. See ADR index.
+- **Language/runtime:** TypeScript on Node.js 24 LTS.
+- **Repository:** pnpm monorepo with `apps/api`, `apps/web`, and `apps/worker`; shared boundaries are `packages/config`, `packages/database`, `packages/contracts`, `packages/observability`, `packages/auth`, and `packages/ai`.
+- **Applications:** NestJS backend, REST/JSON API with OpenAPI/Swagger documentation, and Next.js/React/TypeScript frontend.
+- **Data and jobs:** PostgreSQL with Prisma 7, PostgreSQL/pgvector for initial vector search, Redis, and BullMQ initially for background jobs.
+- **Validation and quality:** strong runtime validation at external boundaries; ESLint, Prettier, Husky, lint-staged, Vitest, Supertest, Playwright, Docker Compose for local infrastructure, and GitHub Actions for CI.
+- **Operations:** OpenTelemetry-compatible structured logging, metrics, tracing, and correlation/request IDs.
+- **AI:** provider-neutral internal abstraction; domain logic must not be coupled to a model-provider SDK.
+
+The approved baseline does not authorize product functionality, authentication implementation, database schema, provider selection, or deployment-specific vendors beyond the named engineering technologies.
 
 ## Confirmed requirements vs assumptions
 

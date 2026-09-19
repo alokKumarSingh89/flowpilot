@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Context
 
@@ -10,7 +10,7 @@ Workspaces must never access another workspace's data. The MVP needs practical o
 
 ## Decision
 
-Use shared PostgreSQL infrastructure. Every workspace-owned record has `workspace_id`; server-derived tenant context scopes all access; PostgreSQL row-level security provides defense in depth. The application database role does not own tenant tables and cannot bypass RLS; exceptional operational access is separately controlled. Apply the same scope to vectors, caches, storage, jobs, and tools. Object keys are server-generated and signed URLs require exact asset/operation authorization.
+Use shared PostgreSQL infrastructure with Prisma 7 for application data access and migrations. Every workspace-owned record has `workspace_id`; server-derived tenant context scopes all access; PostgreSQL row-level security provides defense in depth. Prisma usage must preserve transaction-scoped tenant context and must not bypass RLS. The application database role does not own tenant tables and cannot bypass RLS; exceptional operational access is separately controlled. Apply the same scope to vectors, caches, storage, jobs, and tools. Object keys are server-generated and signed URLs require exact asset/operation authorization.
 
 ## Alternatives Considered
 
