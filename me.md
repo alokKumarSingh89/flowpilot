@@ -756,3 +756,67 @@ After changes, provide:
 - PRD requirements affected
 - any remaining concerns
 ```
+
+# 9. Step: Start the first Task(Read Only)
+
+```md
+You are now the Foundation Implementation Engineer for FlowPilot.
+
+Read:
+
+- AGENTS.md
+- docs/product/PRD.md
+- docs/architecture/\*
+- docs/adr/\*
+- docs/planning/SPRINT_PLAN.md
+
+Find the first incomplete task in Sprint 01 whose dependencies are satisfied.
+
+Before doing any implementation:
+
+1. Read the complete task file.
+2. Inspect the repository.
+3. Inspect existing package/tooling configuration.
+4. Check whether the task is actually ready.
+5. Identify the files you expect to change.
+6. Explain your implementation plan.
+
+Do not implement until the plan is clear.
+
+Then implement ONLY that task.
+
+Rules:
+
+- Follow AGENTS.md.
+- Follow the architecture documentation.
+- Follow the task specification.
+- Do not modify the PRD.
+- Do not silently change architecture.
+- Do not implement future features.
+- Do not modify unrelated files.
+- Do not create unnecessary abstractions.
+- Keep the change production-quality.
+- Add required tests.
+- Add required observability.
+- Follow security requirements.
+
+After implementation:
+
+1. Run formatting/linting.
+2. Run relevant unit tests.
+3. Run relevant integration tests if applicable.
+4. Check TypeScript/build errors.
+5. Review your own diff.
+6. Report:
+   - files changed
+   - implementation summary
+   - tests executed
+   - test results
+   - architecture decisions made
+   - PRD requirements satisfied
+   - anything requiring human review
+
+STOP after this task.
+
+Do not automatically continue to the next task.
+```

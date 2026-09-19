@@ -26,6 +26,7 @@ Sales/billing agents, workflows, orchestration, marketplace, voice, multichannel
 ## Domain rules
 
 - Every workspace-owned aggregate is accessed with a server-derived tenant context. [WS-008; RBAC-003; SEC-001]
+- Identity owns the provider adapter and FlowPilot user provisioning. Workspace owns membership and role decisions; authenticated provider claims never grant workspace access by themselves. [AUTH-001–008; WS-003–008; RBAC-001–003]
 - An agent belongs to one workspace, uses only selected knowledge, and only uses granted tools. The MVP selector resolves at most one active support agent; it must not be hard-coded as a workspace singleton. [AGENT-004–008]
 - Conversation messages are retained; a handoff records a durable state transition and actor/reason. [CHAT-003–004; HANDOFF-007]
 - Analytics is derived from durable domain events and remains workspace-scoped. [ANALYTICS-001–005]

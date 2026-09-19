@@ -6,7 +6,8 @@ FlowPilot must enforce server-side authorization and tenant isolation, protect c
 
 ## Identity, authorization, and tenancy
 
-- Use a managed identity provider for registration, login, logout, refresh, reset, and secure session lifecycle. Authentication failures are recorded without sensitive details. [AUTH-001–008]
+- Use a managed identity provider for registration, login, logout, refresh, reset, and secure session lifecycle. The API validates issuer, audience, signature/JWKS, expiry, and required claims before mapping the immutable provider subject to an internal user. Authentication failures are recorded without sensitive details. Provider selection, non-production tenancy, redirect origins, and secret locations must be approved before provider integration begins. [AUTH-001–008]
+- Provider organizations, groups, claims, and UI controls are not FlowPilot authorization. Resolve workspace membership and role from FlowPilot-controlled data after authentication; never derive tenant access from client-provided workspace identifiers or mutable provider profile data. [WS-008; RBAC-001–003; SEC-001–002]
 - Resolve workspace membership and role server-side for each authenticated request. UI visibility is not authorization. [RBAC-001–005]
 - Carry immutable tenant context through API, services, repositories, jobs, caches, object storage, retrieval, and tools. Every workspace-owned query includes workspace scope; RLS is a second control. The application database role must not own tenant tables or bypass RLS; privileged operational access is exceptional and controlled. [WS-008; RBAC-003; SEC-001–002]
 - Customer chat uses scoped, server-resolved public deployment credentials, not member credentials. Credentials are revocable/rotatable and protected by per-deployment/IP/session quotas and abuse controls. Origin validation is an additional browser protection, not authorization. [CHAT-001–006; SEC-010]

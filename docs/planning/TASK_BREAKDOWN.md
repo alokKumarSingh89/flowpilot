@@ -8,7 +8,7 @@ Each task is an implementation-sized, reviewable unit. `Tests required` is the m
 
 | Task | PRD | Area | Description | Dependencies | Acceptance criteria | Tests required |
 |---|---|---|---|---|---|---|
-| TASK-PLAT-001 | OBS-001, OBS-006 | Platform | Establish modular application/package boundaries, configuration validation, and API error/correlation conventions. | None | Services accept validated configuration and emit a request ID without sensitive values. | Config and correlation unit tests. |
+| TASK-PLAT-001 | OBS-001, OBS-006 | Platform | Establish the approved application/package layout, deterministic tooling baseline, validated non-secret runtime configuration, and API error/correlation conventions. | None | API bootstrap rejects invalid configuration before serving; request IDs are generated/propagated; error responses and telemetry contain no sensitive values. | Config, request-ID, error-contract, and redaction unit/API tests. |
 | TASK-PLAT-002 | SEC-003, SEC-004, OBS-006 | Secrets | Define runtime secret-provider boundary, redaction policy, and local/CI secret handling. | PLAT-001 | No credential is in source, logs, errors, or client configuration. | Secret/redaction checks. |
 | TASK-PLAT-003 | WS-008, SEC-001, SEC-002 | Persistence | Establish workspace-scoped persistence conventions, transaction tenant context, non-owner app DB role, and RLS baseline. | PLAT-001 | Unscoped/cross-workspace persistence is denied; app role cannot bypass RLS. | Database/RLS integration tests. |
 | TASK-PLAT-004 | JOB-001–004, OBS-004 | Jobs | Establish durable job envelope, idempotency key, bounded retry/DLQ policy, and worker correlation propagation. | PLAT-001 | Duplicate jobs are safe; retry exhaustion is visible and routed to DLQ. | Job retry/idempotency integration tests. |
@@ -19,7 +19,7 @@ Each task is an implementation-sized, reviewable unit. `Tests required` is the m
 
 | Task | PRD | Area | Description | Dependencies | Acceptance criteria | Tests required |
 |---|---|---|---|---|---|---|
-| TASK-AUTH-001 | AUTH-001, AUTH-002, AUTH-004 | Authentication | Integrate managed identity registration, login, and refresh verification with internal-user provisioning. | PLAT-001–003 | Valid identity lifecycle creates/maps an internal user; invalid credentials are rejected. | Provider adapter and auth integration tests. |
+| TASK-AUTH-001 | AUTH-001, AUTH-002, AUTH-004 | Authentication | Integrate the ADR-0007-approved managed identity provider for registration, login, and refresh verification with internal-user provisioning. | PLAT-001–003, PLAT-005; approved ADR-0007 provider-selection record | Valid identity lifecycle creates/maps an internal user; invalid credentials are rejected without token/credential exposure. | Provider adapter, token-validation, provisioning, and auth integration tests. |
 | TASK-AUTH-002 | AUTH-003, AUTH-005 | Authentication | Implement logout/session invalidation and password-reset initiation/completion integration. | AUTH-001 | Logout/recovery follows provider lifecycle without exposing tokens. | Auth lifecycle integration tests. |
 | TASK-AUTH-003 | AUTH-006 | Identity | Implement authenticated profile read/update boundary. | AUTH-001 | A user updates only their own profile. | Authorization/API tests. |
 | TASK-AUTH-004 | AUTH-007, AUTH-008, OBS-005–006 | Authentication | Record safe authentication outcomes and redact sensitive identity failures. | AUTH-001–002, PLAT-005 | Success/failure events are observable with no credentials/tokens. | Log redaction and event tests. |

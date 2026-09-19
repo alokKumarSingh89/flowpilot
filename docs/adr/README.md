@@ -10,7 +10,7 @@ ADRs capture durable, non-trivial engineering decisions. They document approved 
 | [ADR-0004](ADR-0004-knowledge-and-vector-search.md) | PostgreSQL/pgvector knowledge architecture | Proposed |
 | [ADR-0005](ADR-0005-ai-runtime-and-provider-gateway.md) | Bounded AI runtime and provider gateway | Proposed |
 | [ADR-0006](ADR-0006-durable-background-jobs.md) | Durable queue and idempotent workers | Proposed |
-| [ADR-0007](ADR-0007-managed-identity.md) | Managed identity provider | Proposed |
+| [ADR-0007](ADR-0007-managed-identity.md) | Managed identity provider with FlowPilot internal user profile | Accepted |
 | [ADR-0008](ADR-0008-observability-and-audit.md) | OpenTelemetry, separated audit trail, and AI telemetry | Proposed |
 
-Status is `Proposed` until formally accepted. Future changes require a new ADR or a superseding ADR, plus explicit approval when scope or architecture changes.
+An ADR is `Proposed` until formally accepted. Future changes require a new ADR or a superseding ADR, plus explicit approval when scope or architecture changes.

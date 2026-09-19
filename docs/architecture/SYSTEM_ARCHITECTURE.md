@@ -47,6 +47,8 @@ The MVP is a modular monolith: one backend codebase organized by domains, deploy
 | Object storage | Private originals and processed file assets | KB-002, SEC-008 |
 | AI gateway/runtime | Context, retrieval, provider access, tools, limits, traces, controlled failures | RUNTIME-001–010 |
 
+The managed identity provider authenticates users and manages its supported account lifecycle. The API validates provider-issued credentials, maps the immutable provider subject to a FlowPilot internal user, and then applies FlowPilot workspace membership and RBAC. Provider organizations, groups, and claims are not tenant authorization. The identity adapter is the only application boundary that uses provider-specific SDKs or token formats. [AUTH-001–008; WS-008; RBAC-001–003; SEC-001–004]
+
 ## Interfaces and realtime behavior
 
 REST/JSON with OpenAPI is the primary API style. It matches resource-oriented workspace, knowledge, agent, and conversation APIs and keeps authorization and idempotency explicit. SSE streams AI responses; WebSockets publish durable inbox, assignment, and handoff notifications. Persist an event before publishing it, and reconnect clients from a cursor. [CHAT-004–005; HANDOFF-004]

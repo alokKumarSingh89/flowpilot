@@ -16,6 +16,10 @@ Testing is layered: fast tests protect domain rules; integration tests protect b
 | Security | Secret/dependency/SAST scans, RLS cross-tenant tests, authorization fuzzing, file/URL SSRF tests, penetration testing before production |
 | Performance/resilience | Chat concurrency, vector latency, ingestion throughput, backpressure, retry/DLQ, provider outage, duplicate delivery, worker restart |
 
+## Identity-provider testing
+
+Use an approved non-production identity-provider tenant/project and deterministic test identities. Unit tests mock the provider adapter at the identity boundary; integration tests validate issuer/audience/signature/expiry failure handling and subject-to-internal-user provisioning against the approved non-production configuration. E2E tests cover registration, login, refresh, and rejection of invalid credentials without logging credentials or raw tokens. Provider organizations, groups, and claims must not bypass FlowPilot workspace-membership and RBAC tests. [AUTH-001–008; WS-008; RBAC-002–003; SEC-001–004; OBS-001, OBS-006]
+
 ## Requirement traceability
 
 The test suite must explicitly cover tenant isolation and server-side authorization. [WS-008; RBAC-002–003; SEC-001–002] It must validate knowledge states/asynchrony, agent tool boundaries, conversation retention/streaming, handoff lifecycle, jobs, and telemetry propagation. [KB-005–006; AGENT-008; CHAT-004–005; HANDOFF-001–007; JOB-001–004; OBS-001–004]

@@ -37,6 +37,10 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 # Dependencies
 
 - TASK-PLAT-001
+- TASK-PLAT-002
+- TASK-PLAT-003
+- TASK-PLAT-005
+- An approved ADR-0007 provider-selection record identifying the provider, non-production tenant/project, token-verification settings, allowed callback/redirect origins, secret locations, and integration-test strategy.
 
 # Parallelization
 
@@ -56,7 +60,7 @@ Add or update only the minimal authentication data representation needed for the
 
 # Security Requirements
 
-Follow approved secret handling, authorization, tenant isolation, and telemetry-redaction rules.
+Use only the ADR-0007-approved provider configuration. Validate provider-issued credentials at the backend boundary and map the immutable provider subject to a FlowPilot internal user. Do not derive workspace access from provider organizations, groups, claims, client workspace identifiers, or mutable profile data. Follow approved secret handling, authorization, tenant isolation, and telemetry-redaction rules.
 
 # Observability Requirements
 
@@ -68,6 +72,7 @@ Propagate correlation IDs; emit structured, redacted logs and relevant success/f
 - Integration: cover the changed authentication boundary, persistence, queue, storage, provider, or API path as applicable.
 - E2E: cover the affected user-visible flow when the surface is available.
 - Security: cover tenant isolation, authorization, validation, redaction, and abuse cases applicable to this task.
+- Use the approved non-production provider tenant/project and deterministic test identities; do not use production credentials or customer accounts.
 
 # Acceptance Criteria
 
@@ -99,4 +104,3 @@ Read AGENTS.md and the cited planning and architecture documents before editing.
 - [ ] Tests demonstrate success, failure, authorization, and tenant behavior as applicable.
 - [ ] Security, redaction, telemetry, and audit requirements are met.
 - [ ] No future/non-MVP feature or unrelated change is included.
-
