@@ -1,4 +1,4 @@
-# 1. Step
+# 1. Give this promt to read PRD and suggest the plan
 
 ```text
 You are the Lead Engineer and Software Architect for the FlowPilot project.
@@ -224,7 +224,7 @@ G. Recommended engineering roadmap
 Do not start implementation until I explicitly approve the architecture.
 ```
 
-# 2. Step
+# 2. Ask to creat step if you are okay with plan
 
 ```text
 The architecture analysis is complete.
@@ -691,4 +691,68 @@ Finally produce a summary:
 - PRD requirements without tasks
 - tasks without PRD requirements
 - possible oversized tasks
+```
+
+# Step 7 — Review the task structure
+
+```md
+Perform a task-plan consistency review.
+
+Read:
+
+- docs/product/PRD.md
+- docs/planning/SPRINT_PLAN.md
+- docs/planning/TASK_BREAKDOWN.md
+- docs/planning/TRACEABILITY.md
+- docs/planning/tasks/\*
+
+Do NOT modify anything.
+
+Check for:
+
+1. Missing PRD requirements
+2. Tasks without PRD references
+3. Invalid task dependencies
+4. Circular dependencies
+5. Tasks that are too large
+6. Duplicate responsibilities
+7. Missing testing work
+8. Missing security work
+9. Missing observability work
+10. Incorrect sprint ordering
+11. Hidden scope expansion
+12. MVP tasks depending on future features
+13. Tasks that cannot realistically be completed independently by an agent
+
+Return a structured review with:
+
+- Critical problems
+- High-risk problems
+- Medium problems
+- Minor improvements
+- Recommended corrections
+
+Do not modify files.
+```
+
+# 8.Step: If the review finds problems, use:
+
+```md
+Apply only the corrections identified in the previous task-plan review.
+
+Before modifying files:
+
+1. Verify each correction against docs/product/PRD.md.
+2. Do not introduce new product scope.
+3. Do not change approved architecture.
+4. Do not implement application code.
+
+Update only the affected planning/task documentation.
+
+After changes, provide:
+
+- files changed
+- corrections made
+- PRD requirements affected
+- any remaining concerns
 ```
