@@ -325,7 +325,7 @@ After completion, provide a summary of:
 Do not implement application code.
 ```
 
-# 3. Step
+# 3. Step Review the given architeck
 
 If Codex made a questionable architectural decision, don't immediately ask it to change everything.
 
@@ -348,7 +348,7 @@ Do not modify files.
 Return only the identified risks and proposed corrections.
 ```
 
-# 4. Step
+# 4. Step fix if have any bug
 
 Then, if necessary:
 
@@ -360,4 +360,335 @@ Do not change the PRD.
 Update only the affected architecture and ADR documentation.
 
 After updating, summarize exactly what changed and why.
+```
+
+# Step 5 — Now ask Codex to become the Engineering Manager
+
+```md
+The architecture documentation is now approved.
+
+Act as the Engineering Manager / Technical Program Lead for FlowPilot.
+
+Read:
+
+- docs/product/PRD.md
+- AGENTS.md
+- docs/architecture/\*
+- docs/adr/\*
+
+Your task is to transform the approved product requirements and architecture into an executable engineering plan.
+
+IMPORTANT:
+
+Do NOT implement application code.
+
+Do NOT install dependencies.
+
+Do NOT create application source files.
+
+Do NOT change product requirements.
+
+Do NOT silently add features.
+
+Create:
+
+docs/
+└── planning/
+├── ROADMAP.md
+├── SPRINT_PLAN.md
+├── TASK_BREAKDOWN.md
+└── TRACEABILITY.md
+
+The plan must be synchronized with the PRD.
+
+Every implementation task MUST reference one or more PRD requirement IDs.
+
+Example:
+
+TASK-AUTH-001
+PRD: AUTH-001, AUTH-002
+Sprint: 01
+Area: Authentication
+Description: ...
+Dependencies: ...
+Acceptance Criteria: ...
+Tests Required: ...
+
+Create a realistic engineering roadmap.
+
+Separate:
+
+1. Foundation
+2. MVP
+3. Post-MVP
+4. Future/Scale
+
+For the MVP create explicit sprints.
+
+Each sprint must contain:
+
+- sprint number
+- sprint goal
+- PRD requirements covered
+- architecture areas involved
+- tasks
+- dependencies
+- parallelizable tasks
+- sequential tasks
+- acceptance criteria
+- testing requirements
+- security requirements
+- observability requirements
+- Definition of Done
+
+Tasks must be small enough that a coding agent can implement them safely.
+
+Avoid tasks such as:
+
+"Build authentication."
+
+Instead split them into meaningful implementation units.
+
+Example:
+
+- establish auth module
+- user registration
+- password hashing
+- login
+- session/token management
+- authorization guard
+- RBAC
+- tests
+- security tests
+
+Identify which tasks can be implemented in parallel.
+
+Identify which tasks require previous tasks.
+
+Create a PRD-to-task traceability matrix.
+
+Every PRD requirement must be classified as:
+
+- planned
+- implemented
+- deferred
+- future
+- needs clarification
+
+Do not leave requirements silently unaccounted for.
+
+Create a Definition of Done covering:
+
+- implementation
+- unit tests
+- integration tests
+- E2E tests
+- security
+- observability
+- documentation
+- code review
+- PRD traceability
+
+The final plan must be practical for a small engineering team using AI coding agents.
+
+Do not optimize for producing many tasks.
+
+Optimize for safe, reviewable, independently verifiable tasks.
+
+At the end provide:
+
+1. Number of MVP sprints
+2. Sprint goals
+3. Dependencies
+4. Parallelization opportunities
+5. Highest-risk areas
+6. Recommended agent roles
+```
+
+# Step 6 — Make Codex create individual task specifications
+
+```md
+We are now converting the approved engineering plan into executable agent tasks.
+
+Read:
+
+- AGENTS.md
+- docs/product/PRD.md
+- docs/architecture/\*
+- docs/adr/\*
+- docs/planning/ROADMAP.md
+- docs/planning/SPRINT_PLAN.md
+- docs/planning/TASK_BREAKDOWN.md
+- docs/planning/TRACEABILITY.md
+
+IMPORTANT:
+
+This is still a planning/documentation task.
+
+Do NOT:
+
+- implement application code
+- install dependencies
+- create application source files
+- modify the PRD
+- change architecture decisions
+- expand product scope
+
+Create:
+
+docs/planning/tasks/
+
+Create one Markdown file for every implementation task.
+
+Use this naming convention:
+
+TASK-<DOMAIN>-<NUMBER>-<short-description>.md
+
+Example:
+
+TASK-AUTH-001-project-foundation.md
+TASK-AUTH-002-user-registration.md
+TASK-KB-001-knowledge-source-model.md
+
+Each task file must contain:
+
+# Task ID
+
+# Title
+
+# Sprint
+
+# PRD Requirements
+
+List exact PRD requirement IDs.
+
+# Objective
+
+Clearly explain what this task accomplishes.
+
+# Context
+
+Explain the relevant architecture and business context.
+
+# Scope
+
+Explicitly describe what is included.
+
+# Out of Scope
+
+Explicitly describe what must NOT be implemented.
+
+# Dependencies
+
+List task IDs that must be completed first.
+
+# Parallelization
+
+State whether this task can run in parallel with other tasks.
+
+If yes, list compatible tasks.
+
+# Expected Changes
+
+Describe the expected areas/files/modules that may change.
+
+Do not invent exact files if the architecture has not established them yet.
+
+# API / Contract Changes
+
+Describe APIs, events, interfaces, schemas, or contracts affected.
+
+If none, say so.
+
+# Data Changes
+
+Describe database/schema changes.
+
+If none, say so.
+
+# Security Requirements
+
+Describe security considerations.
+
+# Observability Requirements
+
+Describe logging, metrics, tracing, or audit requirements.
+
+# Testing Requirements
+
+Define:
+
+- unit tests
+- integration tests
+- E2E tests where appropriate
+- security tests where appropriate
+
+# Acceptance Criteria
+
+Use explicit testable criteria.
+
+Example:
+
+- [ ] User can register with valid credentials.
+- [ ] Duplicate email is rejected.
+- [ ] Password is never stored in plaintext.
+- [ ] Appropriate validation errors are returned.
+- [ ] Tests cover successful registration.
+- [ ] Tests cover duplicate registration.
+
+# Definition of Done
+
+Include:
+
+- implementation complete
+- tests passing
+- security requirements satisfied
+- observability added where required
+- documentation updated where required
+- PRD traceability maintained
+- no unrelated changes
+
+# Agent Instructions
+
+Give concise instructions to the coding agent.
+
+# Human Review Checklist
+
+Give the human reviewer a checklist.
+
+IMPORTANT:
+
+Tasks must be small enough for one coding agent to complete safely in one focused session.
+
+Do not create giant tasks such as:
+
+"Build authentication."
+
+Split large domains into independently reviewable tasks.
+
+Do not create duplicate tasks.
+
+Every task must map to at least one PRD requirement.
+
+Every PRD requirement must remain traceable.
+
+After creating the files, validate:
+
+1. Every task has a PRD requirement.
+2. Every task belongs to a sprint.
+3. Dependencies reference existing task IDs.
+4. No circular dependencies exist.
+5. Every PRD requirement is accounted for.
+6. MVP tasks are separated from future work.
+
+Finally produce a summary:
+
+- total tasks
+- tasks per sprint
+- tasks per domain
+- parallelizable tasks
+- sequential dependencies
+- PRD requirements without tasks
+- tasks without PRD requirements
+- possible oversized tasks
 ```
