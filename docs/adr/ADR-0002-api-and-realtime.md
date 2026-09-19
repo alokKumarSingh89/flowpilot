@@ -10,7 +10,7 @@ MVP resources are workspace, membership, knowledge, agents, conversations, and a
 
 ## Decision
 
-Use NestJS REST/JSON endpoints with generated OpenAPI/Swagger documentation for resource APIs, SSE for ordered AI response streaming, and WebSockets for support-inbox and handoff notifications. Persist durable events before realtime publication.
+Use the approved stable NestJS 12.x REST/JSON API with generated OpenAPI/Swagger documentation for resource APIs, SSE for ordered AI response streaming, and WebSockets for support-inbox and handoff notifications. Persist durable events before realtime publication.
 
 ## Alternatives Considered
 

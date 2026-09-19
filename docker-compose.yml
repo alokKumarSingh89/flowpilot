@@ -1,0 +1,4 @@
+name: flowpilot
+
+# Infrastructure services are intentionally introduced by their owning tasks.
+services: {}

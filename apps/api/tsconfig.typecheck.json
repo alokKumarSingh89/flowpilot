@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "composite": false,
+    "noEmit": true,
+    "rootDir": "../..",
+    "paths": {
+      "@flowpilot/config": ["packages/config/src/index.ts"],
+      "@flowpilot/contracts": ["packages/contracts/src/index.ts"],
+      "@flowpilot/observability": ["packages/observability/src/index.ts"]
+    }
+  },
+  "references": []
+}

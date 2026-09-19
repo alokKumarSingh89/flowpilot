@@ -65,7 +65,7 @@ The API remains stateless and scales horizontally. Durable persistence precedes 
 
 - **Language/runtime:** TypeScript on Node.js 26.
 - **Repository:** pnpm monorepo with `apps/api`, `apps/web`, and `apps/worker`; shared boundaries are `packages/config`, `packages/database`, `packages/contracts`, `packages/observability`, `packages/auth`, and `packages/ai`.
-- **Applications:** NestJS backend, REST/JSON API with OpenAPI/Swagger documentation, and Next.js/React/TypeScript frontend.
+- **Applications:** current stable, mutually compatible NestJS 12.x backend packages; REST/JSON API with OpenAPI/Swagger documentation; and Next.js/React/TypeScript frontend.
 - **Data and jobs:** PostgreSQL with Prisma 7, PostgreSQL/pgvector for initial vector search, Redis, and BullMQ initially for background jobs.
 - **Validation and quality:** strong runtime validation at external boundaries; ESLint, Prettier, Husky, lint-staged, Vitest, Supertest, Playwright, Docker Compose for local infrastructure, and GitHub Actions for CI.
 - **Operations:** OpenTelemetry-compatible structured logging, metrics, tracing, and correlation/request IDs.
