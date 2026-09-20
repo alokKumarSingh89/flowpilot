@@ -3,12 +3,13 @@
 ## Status legend
 
 - **Planned:** mapped to an MVP task, not yet implemented.
-- **Implemented:** no requirements have this status; this repository is still planning-only.
+- **Implemented:** all mapped requirement scope has implementation and verification evidence.
+- **Partially implemented:** a mapped task has implementation evidence; remaining mapped work is still planned.
 - **Deferred:** not scheduled for the MVP despite being a valid requirement.
 - **Future:** belongs to explicitly future/non-goal PRD scope.
 - **Needs clarification:** implementation is planned but the documented assumption needs product-owner confirmation before release.
 
-All numbered PRD requirements are accounted for below. The current planning-only state means none are implemented.
+All numbered PRD requirements are accounted for below. TASK-PLAT-001 is complete; TASK-PLAT-002 now provides the secret-access and diagnostic contracts described in the implementation evidence below. Task completion does not imply that a cross-cutting requirement is fully implemented.
 
 ## Authentication
 
@@ -139,8 +140,8 @@ All numbered PRD requirements are accounted for below. The current planning-only
 |---|---|---:|---|
 | SEC-001 | Planned | 00–05 | TASK-PLAT-003, TASK-WS-004, TASK-KB-007, TASK-CHAT-002, TASK-OPS-002 |
 | SEC-002 | Planned | 01–05 | TASK-RBAC-002, TASK-WS-004, TASK-OPS-002 |
-| SEC-003 | Planned | 00, 05 | TASK-PLAT-002, TASK-PLAT-006, TASK-OPS-004 |
-| SEC-004 | Planned | 00, 05 | TASK-PLAT-002, TASK-OPS-004 |
+| SEC-003 | Partially implemented | 00, 05 | TASK-PLAT-002, TASK-PLAT-006, TASK-OPS-004 |
+| SEC-004 | Partially implemented | 00, 05 | TASK-PLAT-002, TASK-OPS-004 |
 | SEC-005 | Planned | 03 | TASK-AGENT-003, TASK-AI-003 |
 | SEC-006 | Planned | 03 | TASK-AGENT-003, TASK-AI-003 |
 | SEC-007 | Planned | 03, 05 | TASK-AI-002, TASK-AI-004, TASK-AI-006, TASK-OPS-002 |
@@ -168,10 +169,17 @@ All numbered PRD requirements are accounted for below. The current planning-only
 | OBS-003 | Planned | 03–04 | TASK-AI-005, TASK-HANDOFF-004 |
 | OBS-004 | Planned | 00–05 | TASK-PLAT-004, TASK-KB-005, TASK-OPS-001 |
 | OBS-005 | Planned | 00–05 | TASK-PLAT-005, TASK-AUTH-004, TASK-AI-005, TASK-OPS-001 |
-| OBS-006 | Planned | 00–05 | TASK-PLAT-002, TASK-PLAT-005, TASK-AUTH-004, TASK-AI-005, TASK-OPS-002 |
+| OBS-006 | Partially implemented | 00–05 | TASK-PLAT-002, TASK-PLAT-005, TASK-AUTH-004, TASK-AI-005, TASK-OPS-002 |
 
 ## PRD future scope and explicit MVP non-goals
 
 These items have no individual requirement IDs and are classified as **Future**. They are intentionally not implementation tasks in the MVP plan: multiple agents, AI orchestration, sales/billing agents, voice, WhatsApp, email, Shopify, Stripe production integration, CRM integrations, advanced workflows, marketplace, advanced RAG, enterprise SSO, and white-labeling. [PRD §5.2, §15]
 
 The plan includes only future-safe extension points—agent/configuration identity, provider abstraction, durable jobs, and tenant-scoped tool grants—not the future capabilities themselves.
+
+## TASK-PLAT-002 implementation evidence
+
+- **SEC-003:** all local `.env` variants except the non-secret example are ignored, including `.env.test`; local/CI secret handling is documented in [the runtime secrets contract](../../packages/config/SECRETS.md). Tests use synthetic values only. Automated repository secret scanning/CI enforcement remains TASK-PLAT-006.
+- **SEC-004:** `packages/config/src/secrets.ts` exports an injected, allow-listed, bounded secret-resolution contract and an explicitly revealed value that redacts during serialization/inspection. Managed-secret vendor integration, deployment access/rotation, and operational verification remain future approved work; no real credentials or database functionality are introduced.
+- **OBS-006:** `packages/observability/src/diagnostics.ts` emits no logs itself and projects only safe outcome codes and correlation IDs; raw configuration/provider failures are discarded. Telemetry pipeline integration remains TASK-PLAT-005.
+- **Verification:** `packages/config/src/secrets.spec.ts`, `packages/observability/src/diagnostics.spec.ts`, and `apps/api/test/secrets-contract.spec.ts` cover public contracts, denied/invalid access, bounded failures, rotation without caching, serialization/redaction, and correlation propagation. Repository format, lint, typecheck, unit/API tests, and build are the validation gates.

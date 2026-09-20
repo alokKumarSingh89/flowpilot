@@ -16,7 +16,7 @@ Each sprint ends with a demonstrable, reviewable increment and the Definition of
 
 **Parallelizable:** application/module skeleton and API contract conventions; environment/secrets policy; telemetry baseline; CI quality gates. RLS verification depends on the persistence baseline.
 
-**Sequential:** establish persistence role model → tenant context/RLS checks → tenant denial integration tests; establish job contract → retry/DLQ behavior.
+**Sequential:** complete TASK-PLAT-001 → TASK-PLAT-002 (reviewed public secret-access/configuration/redaction contracts) → TASK-PLAT-003 (persistence role model → transaction tenant context/RLS checks → tenant denial integration tests). TASK-PLAT-002 and TASK-PLAT-003 must not execute concurrently; persistence consumes public contracts, not provider internals. TASK-PLAT-005/006 may overlap with TASK-PLAT-003 after TASK-PLAT-002 and their other prerequisites are complete. Establish job contract → retry/DLQ behavior; reconcile TASK-PLAT-004's PostgreSQL prerequisite against ADR-0006 before scheduling it as independent persistence work.
 
 **Acceptance criteria:** a request/job has correlation context; secrets are excluded from source/logs; tenant-scoped persistence rejects cross-workspace access; jobs are idempotent/retry-bounded/observable; CI enforces agreed quality checks.
 

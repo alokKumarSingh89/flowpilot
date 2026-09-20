@@ -10,10 +10,16 @@ Each task is an implementation-sized, reviewable unit. `Tests required` is the m
 |---|---|---|---|---|---|---|
 | TASK-PLAT-001 | OBS-001, OBS-006 | Platform | Establish the approved application/package layout, deterministic tooling baseline, validated non-secret runtime configuration, and API error/correlation conventions. | None | API bootstrap rejects invalid configuration before serving; request IDs are generated/propagated; error responses and telemetry contain no sensitive values. | Config, request-ID, error-contract, and redaction unit/API tests. |
 | TASK-PLAT-002 | SEC-003, SEC-004, OBS-006 | Secrets | Define runtime secret-provider boundary, redaction policy, and local/CI secret handling. | PLAT-001 | No credential is in source, logs, errors, or client configuration. | Secret/redaction checks. |
-| TASK-PLAT-003 | WS-008, SEC-001, SEC-002 | Persistence | Establish workspace-scoped persistence conventions, transaction tenant context, non-owner app DB role, and RLS baseline. | PLAT-001 | Unscoped/cross-workspace persistence is denied; app role cannot bypass RLS. | Database/RLS integration tests. |
+| TASK-PLAT-003 | WS-008, SEC-001, SEC-002 | Persistence | Establish workspace-scoped persistence conventions, transaction tenant context, non-owner app DB role, and RLS baseline. | PLAT-001, PLAT-002 | Unscoped/cross-workspace persistence is denied; app role cannot bypass RLS. | Database/RLS integration tests. |
 | TASK-PLAT-004 | JOB-001–004, OBS-004 | Jobs | Establish durable job envelope, idempotency key, bounded retry/DLQ policy, and worker correlation propagation. | PLAT-001 | Duplicate jobs are safe; retry exhaustion is visible and routed to DLQ. | Job retry/idempotency integration tests. |
 | TASK-PLAT-005 | OBS-001, OBS-005–006 | Observability | Add structured logging, error capture, trace propagation, and telemetry redaction middleware. | PLAT-001, PLAT-002 | API and worker errors have correlated, sanitized telemetry. | Telemetry propagation/redaction tests. |
 | TASK-PLAT-006 | SEC-003, OBS-005 | Delivery | Establish CI checks for formatting/type/lint/tests, secret scanning, dependency/security scanning, and artifact health checks. | PLAT-001, PLAT-002 | Pull requests fail on configured quality/security violations. | CI pipeline validation. |
+
+### Foundation contract sequencing
+
+TASK-PLAT-001 → TASK-PLAT-002 → TASK-PLAT-003. TASK-PLAT-003 consumes only TASK-PLAT-002's reviewed public secret-resolution, secret/non-secret configuration separation, sanitized-failure, and redaction contracts through the existing configuration/observability boundaries. Provider implementations and database internals remain independent. Complete TASK-PLAT-002 before starting TASK-PLAT-003; TASK-PLAT-005/006 may overlap with TASK-PLAT-003 after their prerequisites and shared-file ownership are settled.
+
+This scheduling clarification does not change PRD requirement mappings or declare either task implemented. The separate ADR-0006 persistence prerequisite for TASK-PLAT-004 still requires reconciliation; its existing parallelization list is not evidence that it can complete before TASK-PLAT-003.
 
 ## Sprint 01 — Identity, workspace, RBAC, audit
 

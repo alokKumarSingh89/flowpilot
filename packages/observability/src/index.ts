@@ -1,6 +1,8 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomUUID } from 'node:crypto';
 
+export { sanitizeDiagnostic, type DiagnosticCode, type SafeDiagnostic } from './diagnostics.js';
+
 export const CORRELATION_ID_HEADER = 'x-request-id';
 
 export interface RequestContext {

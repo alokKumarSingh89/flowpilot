@@ -1,3 +1,12 @@
+export {
+  createSecretResolver,
+  SecretResolutionError,
+  SecretValue,
+  type SecretErrorCode,
+  type SecretProvider,
+  type SecretResolver,
+} from './secrets.js';
+
 export type EnvironmentName = 'development' | 'production' | 'test';
 
 export interface RuntimeConfig {

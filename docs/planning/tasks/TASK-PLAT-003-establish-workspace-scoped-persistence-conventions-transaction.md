@@ -37,10 +37,11 @@ This is an MVP task from the approved modular-monolith plan. It must preserve se
 # Dependencies
 
 - TASK-PLAT-001
+- TASK-PLAT-002 — completed and reviewed public secret-access, configuration-separation, sanitized-failure, and redaction contracts.
 
 # Parallelization
 
-No. This task is on a required dependency path; begin only after the listed dependencies are complete.
+Do not run in parallel with TASK-PLAT-002. Begin only after TASK-PLAT-001 and TASK-PLAT-002 are complete. After those prerequisites, TASK-PLAT-005 and TASK-PLAT-006 may run concurrently when shared-file ownership and public contracts are agreed; this is not a blanket prohibition on independent work. Do not infer that TASK-PLAT-004 is independent: its PostgreSQL-backed job state requires a separate dependency review against ADR-0006.
 
 # Expected Changes
 
@@ -48,7 +49,9 @@ Update the approved persistence area, focused interfaces/contracts, tests, and n
 
 # API / Contract Changes
 
-Internal configuration, request/error, worker, or CI contract only; no product API unless the approved task explicitly requires one.
+Consume only the public provider-neutral contracts established by TASK-PLAT-002: server-only secret resolution and secret/non-secret configuration separation from `packages/config`, and sanitized configuration/error diagnostics from `packages/observability`. Resolve database credentials at the trusted bootstrap boundary and pass the required connection configuration into the database boundary; never include credentials or connection strings in public configuration, logs, or errors.
+
+This is a contract dependency, not a dependency on secret-provider internals, SDKs, storage/caching, or environment-variable parsing. Persistence tests may inject a deterministic test provider conforming to the same contract. TASK-PLAT-003 owns database-specific validation, Prisma integration, transaction tenant context, roles, and RLS; TASK-PLAT-002 must not import database implementation details. No product API or production secret-manager selection is required.
 
 # Data Changes
 
