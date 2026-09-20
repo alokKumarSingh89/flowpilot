@@ -1,0 +1,6 @@
+{
+  "name": "@flowpilot/worker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reserved BullMQ worker boundary; job implementation is out of scope for TASK-PLAT-001."
+}

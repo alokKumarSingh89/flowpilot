@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Context
 
@@ -10,7 +10,7 @@ FlowPilot needs multiple business domains, asynchronous ingestion, realtime conv
 
 ## Decision
 
-Use one modular backend codebase with explicit domain boundaries. Deploy stateless API/BFF and background-worker processes independently so their scaling and failure behavior are isolated.
+Use a pnpm TypeScript monorepo on Node.js 26. The API uses the current stable, mutually compatible NestJS 12.x framework, platform-adapter, and OpenAPI packages. Organize deployable applications as `apps/api` (NestJS REST/OpenAPI API), `apps/web` (Next.js/React), and `apps/worker` (background-worker process), with shared packages under `packages/`. Deploy the stateless API/BFF and background-worker processes independently so their scaling and failure behavior are isolated.
 
 ## Alternatives Considered
 
@@ -20,7 +20,7 @@ Use one modular backend codebase with explicit domain boundaries. Deploy statele
 
 ## Consequences
 
-The team must preserve module boundaries and avoid cross-domain database shortcuts. API and worker deployments can scale independently; later service extraction remains possible when backed by operational evidence.
+The team must preserve module boundaries and avoid cross-domain database shortcuts. API and worker deployments can scale independently; later service extraction remains possible when backed by operational evidence. The initial shared package boundaries are configuration, database, contracts, observability, authentication, and AI; adding a shared package requires a demonstrated domain boundary rather than convenience alone.
 
 ## PRD Requirements
 

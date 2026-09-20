@@ -6,7 +6,8 @@ FlowPilot must enforce server-side authorization and tenant isolation, protect c
 
 ## Identity, authorization, and tenancy
 
-- Use a managed identity provider for registration, login, logout, refresh, reset, and secure session lifecycle. Authentication failures are recorded without sensitive details. [AUTH-001–008]
+- Use a managed identity provider for registration, login, logout, refresh, reset, and secure session lifecycle. The API validates issuer, audience, signature/JWKS, expiry, and required claims before mapping the immutable provider subject to an internal user. Authentication failures are recorded without sensitive details. Provider selection, non-production tenancy, redirect origins, and secret locations must be approved before provider integration begins. [AUTH-001–008]
+- Provider organizations, groups, claims, and UI controls are not FlowPilot authorization. Resolve workspace membership and role from FlowPilot-controlled data after authentication; never derive tenant access from client-provided workspace identifiers or mutable provider profile data. [WS-008; RBAC-001–003; SEC-001–002]
 - Resolve workspace membership and role server-side for each authenticated request. UI visibility is not authorization. [RBAC-001–005]
 - Carry immutable tenant context through API, services, repositories, jobs, caches, object storage, retrieval, and tools. Every workspace-owned query includes workspace scope; RLS is a second control. The application database role must not own tenant tables or bypass RLS; privileged operational access is exceptional and controlled. [WS-008; RBAC-003; SEC-001–002]
 - Customer chat uses scoped, server-resolved public deployment credentials, not member credentials. Credentials are revocable/rotatable and protected by per-deployment/IP/session quotas and abuse controls. Origin validation is an additional browser protection, not authorization. [CHAT-001–006; SEC-010]
@@ -14,7 +15,7 @@ FlowPilot must enforce server-side authorization and tenant isolation, protect c
 ## Data, secrets, and APIs
 
 - Store provider/integration credentials in a managed secret manager; encrypt in transit and at rest; rotate them; never commit or log them. [SEC-003–004]
-- Validate request and tool schemas, enforce payload/size limits, idempotency where needed, CORS policy, rate limits, WAF/bot controls, and secure cookie/CSRF controls where applicable. [SEC-006, SEC-010]
+- Validate configuration, request, and tool schemas at external boundaries before domain handling; enforce payload/size limits, idempotency where needed, CORS policy, rate limits, WAF/bot controls, and secure cookie/CSRF controls where applicable. Validation failures use safe typed errors and must not echo sensitive input. [SEC-006, SEC-010; OBS-006]
 - Uploads are private, type/size/signature validated and scanned before parsing. Object keys are server-generated; signed URLs are short-lived and authorized against the exact asset and operation. URL ingestion blocks SSRF via network, redirect, content, and timeout restrictions. [KB-002; SEC-008]
 
 ## AI and tool safety

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Context
 
@@ -10,7 +10,7 @@ The MVP needs text, FAQ, URL, and PDF processing, searchable tenant-scoped conte
 
 ## Decision
 
-Store source metadata, versions, chunks, and vectors in PostgreSQL using pgvector, with PostgreSQL full-text search as a complementary lexical signal. Store originals privately in object storage. Version source processing and apply workspace, active-version, and agent-approved-source authorization predicates in every retrieval query; validate returned chunk ownership before context assembly.
+Store source metadata, versions, chunks, and vectors in PostgreSQL using pgvector, with PostgreSQL full-text search as a complementary lexical signal. Prisma 7 manages relational metadata and migrations; vector extension setup and vector-query paths must preserve the same transaction-scoped tenant predicates. Store originals privately in object storage. Version source processing and apply workspace, active-version, and agent-approved-source authorization predicates in every retrieval query; validate returned chunk ownership before context assembly.
 
 ## Alternatives Considered
 

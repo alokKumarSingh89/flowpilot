@@ -38,11 +38,11 @@ Each sprint ends with a demonstrable, reviewable increment and the Definition of
 
 **Tasks:** TASK-AUTH-001 through TASK-AUTH-004; TASK-WS-001 through TASK-WS-004; TASK-RBAC-001 through TASK-RBAC-003; TASK-AUDIT-001.
 
-**Dependencies:** Sprint 00 tenant and telemetry controls. Membership requires workspace creation; resource authorization requires membership/role policy.
+**Dependencies:** `TASK-AUTH-001` starts only after `TASK-PLAT-001`, `TASK-PLAT-002`, `TASK-PLAT-003`, and `TASK-PLAT-005` are complete, and after the approved provider-selection record required by ADR-0007 is available. Membership requires workspace creation; resource authorization requires membership/role policy. No Sprint 01 task may select an identity provider implicitly.
 
 **Parallelizable:** identity lifecycle adapters; workspace/settings endpoints; role-policy matrix and UI guards; audit-event integration. UI work may use approved contracts.
 
-**Sequential:** verify identity → provision/update internal user → create/select workspace → manage membership/roles → enforce policy on workspace resources.
+**Sequential:** approve provider-selection record → verify identity → provision/update internal user → create/select workspace → manage membership/roles → enforce policy on workspace resources.
 
 **Acceptance criteria:** a user can register, log in/out/refresh/reset/update profile; create and switch workspaces; owner can invite/remove/assign roles; all roles have tested server-side access boundaries; important access changes are audited.
 

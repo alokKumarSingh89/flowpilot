@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noEmit": true,
+    "paths": {
+      "@flowpilot/config": ["packages/config/src/index.ts"],
+      "@flowpilot/contracts": ["packages/contracts/src/index.ts"],
+      "@flowpilot/observability": ["packages/observability/src/index.ts"]
+    }
+  },
+  "include": ["apps/**/*.ts", "packages/**/*.ts", "vitest.config.ts"]
+}

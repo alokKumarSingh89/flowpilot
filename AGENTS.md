@@ -11,6 +11,11 @@ FlowPilot is a multi-tenant SaaS platform for knowledge-grounded AI customer sup
 - `docs/adr/`: architectural decision records and their index.
 - Application source directories will be added only through approved implementation work.
 
+## Approved platform baseline
+
+- Use Node.js 26 and the current stable, mutually compatible NestJS 12.x packages for the API foundation.
+- Keep NestJS framework, platform-adapter, and companion packages on compatible majors; do not introduce Nest CLI or scaffolding dependencies unless a task requires them.
+
 ## Architectural principles
 
 - Enforce workspace isolation and authorization server-side.

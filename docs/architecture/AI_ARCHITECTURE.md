@@ -52,7 +52,7 @@ Tool calls and outcomes are traceable and auditable. Future action tools require
 
 ## Provider and model abstraction
 
-Application domains use provider-neutral interfaces for chat completion/streaming and embeddings. A gateway selects an approved model, applies timeout/retry/redaction/usage policy, normalizes responses, and emits telemetry. This avoids unnecessary single-provider coupling while avoiding premature automatic multi-provider routing. [Product Principle: Provider flexibility; RUNTIME-006]
+Application domains use provider-neutral interfaces in `packages/ai` for chat completion/streaming and embeddings. A gateway selects an approved model, applies timeout/retry/redaction/usage policy, normalizes responses, and emits telemetry. This avoids unnecessary single-provider coupling while avoiding premature automatic multi-provider routing. [Product Principle: Provider flexibility; RUNTIME-006]
 
 ## Guardrails, escalation, and failure
 
